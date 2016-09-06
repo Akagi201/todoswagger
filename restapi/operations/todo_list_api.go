@@ -46,6 +46,12 @@ type TodoListAPI struct {
 
 	// TodosGetHandler sets the operation handler for the get operation
 	TodosGetHandler todos.GetHandler
+	// TodosAddOneHandler sets the operation handler for the add one operation
+	TodosAddOneHandler todos.AddOneHandler
+	// TodosDestroyOneHandler sets the operation handler for the destroy one operation
+	TodosDestroyOneHandler todos.DestroyOneHandler
+	// TodosUpdateOneHandler sets the operation handler for the update one operation
+	TodosUpdateOneHandler todos.UpdateOneHandler
 
 	// ServeError is called when an error is received, there is a default handler
 	// but you can set your own with this
@@ -111,6 +117,18 @@ func (o *TodoListAPI) Validate() error {
 
 	if o.TodosGetHandler == nil {
 		unregistered = append(unregistered, "todos.GetHandler")
+	}
+
+	if o.TodosAddOneHandler == nil {
+		unregistered = append(unregistered, "todos.AddOneHandler")
+	}
+
+	if o.TodosDestroyOneHandler == nil {
+		unregistered = append(unregistered, "todos.DestroyOneHandler")
+	}
+
+	if o.TodosUpdateOneHandler == nil {
+		unregistered = append(unregistered, "todos.UpdateOneHandler")
 	}
 
 	if len(unregistered) > 0 {
@@ -190,6 +208,21 @@ func (o *TodoListAPI) initHandlerCache() {
 		o.handlers[strings.ToUpper("GET")] = make(map[string]http.Handler)
 	}
 	o.handlers["GET"]["/"] = todos.NewGet(o.context, o.TodosGetHandler)
+
+	if o.handlers["POST"] == nil {
+		o.handlers[strings.ToUpper("POST")] = make(map[string]http.Handler)
+	}
+	o.handlers["POST"]["/"] = todos.NewAddOne(o.context, o.TodosAddOneHandler)
+
+	if o.handlers["DELETE"] == nil {
+		o.handlers[strings.ToUpper("DELETE")] = make(map[string]http.Handler)
+	}
+	o.handlers["DELETE"]["/{id}"] = todos.NewDestroyOne(o.context, o.TodosDestroyOneHandler)
+
+	if o.handlers["PUT"] == nil {
+		o.handlers[strings.ToUpper("PUT")] = make(map[string]http.Handler)
+	}
+	o.handlers["PUT"]["/{id}"] = todos.NewUpdateOne(o.context, o.TodosUpdateOneHandler)
 
 }
 
