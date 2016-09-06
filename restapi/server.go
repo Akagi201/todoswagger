@@ -10,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	swag "github.com/go-openapi/swag"
+	"github.com/go-openapi/swag"
 	flags "github.com/jessevdk/go-flags"
 	graceful "github.com/tylerb/graceful"
 
@@ -143,7 +143,7 @@ func (s *Server) Serve() (err error) {
 			if err := domainSocket.Serve(l); err != nil {
 				s.Fatalf("%v", err)
 			}
-			s.Logf("stopped serving todo list at unix://%s", s.SocketPath)
+			s.Logf("Stopped serving todo list at unix://%s", s.SocketPath)
 		}(s.domainSocketL)
 	}
 
@@ -160,7 +160,7 @@ func (s *Server) Serve() (err error) {
 			if err := httpServer.Serve(l); err != nil {
 				s.Fatalf("%v", err)
 			}
-			s.Logf("stopped serving todo list at http://%s", l.Addr())
+			s.Logf("Stopped serving todo list at http://%s", l.Addr())
 		}(s.httpServerL)
 	}
 
@@ -190,7 +190,7 @@ func (s *Server) Serve() (err error) {
 			if err := httpsServer.Serve(l); err != nil {
 				s.Fatalf("%v", err)
 			}
-			s.Logf("stopped serving todo list at https://%s", l.Addr())
+			s.Logf("Stopped serving todo list at https://%s", l.Addr())
 		}(tls.NewListener(s.httpsServerL, httpsServer.TLSConfig))
 	}
 

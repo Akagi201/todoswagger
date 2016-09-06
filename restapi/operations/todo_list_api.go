@@ -13,7 +13,7 @@ import (
 	middleware "github.com/go-openapi/runtime/middleware"
 	spec "github.com/go-openapi/spec"
 	strfmt "github.com/go-openapi/strfmt"
-	swag "github.com/go-openapi/swag"
+	"github.com/go-openapi/swag"
 
 	"github.com/Akagi201/todoswagger/restapi/operations/todos"
 )

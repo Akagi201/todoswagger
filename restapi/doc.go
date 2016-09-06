@@ -8,7 +8,7 @@ The product of a tutorial on goswagger.io
       https
     Host: localhost
     BasePath: /
-    Version: 1.0.0
+    Version: 0.1.0
 
     Consumes:
     - application/io.goswagger.examples.todo-list.v1+json
