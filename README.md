@@ -12,6 +12,14 @@ The swagger spec at "./swagger.yml" is valid against swagger specification 2.0
 ```
 
 ```
+edit swagger.yml
+```
+
+```
+swagger generate server -A TodoList -f ./swagger.yml
+```
+
+```
 cd cmd/todo-list-server
 go build
 ```
