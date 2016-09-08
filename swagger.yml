@@ -1,4 +1,3 @@
----
 swagger: "2.0"
 info:
   description: The product of a tutorial on goswagger.io
@@ -12,6 +11,50 @@ schemes:
 - http
 - https
 paths:
+  /:
+    get:
+      tags:
+        - todos
+      operationId: findTodos
+      parameters:
+        - name: since
+          in: query
+          type: integer
+          format: int64
+        - name: limit
+          in: query
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        200:
+          description: list the todo operations
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/item"
+        default:
+          description: generic error response
+          schema:
+            $ref: "#/definitions/error"
+    post:
+      tags:
+        - todos
+      operationId: addOne
+      parameters:
+        - name: body
+          in: body
+          schema:
+            $ref: "#/definitions/item"
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: "#/definitions/item"
+        default:
+          description: error
+          schema:
+            $ref: "#/definitions/error"
   /{id}:
     parameters:
       - type: integer
@@ -46,49 +89,6 @@ paths:
           description: Deleted
         default:
           description: error
-          schema:
-            $ref: "#/definitions/error"
-  /:
-    post:
-      tags:
-        - todos
-      operationId: addOne
-      parameters:
-        - name: body
-          in: body
-          schema:
-            $ref: "#/definitions/item"
-      responses:
-        201:
-          description: Created
-          schema:
-            $ref: "#/definitions/item"
-        default:
-          description: error
-          schema:
-            $ref: "#/definitions/error"
-    get:
-      tags:
-        - todos
-      parameters:
-        - name: since
-          in: query
-          type: integer
-          format: int64
-        - name: limit
-          in: query
-          type: integer
-          format: int32
-          default: 20
-      responses:
-        200:
-          description: list the todo operations
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/item"
-        default:
-          description: generic error response
           schema:
             $ref: "#/definitions/error"
 definitions:

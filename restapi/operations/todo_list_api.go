@@ -44,12 +44,12 @@ type TodoListAPI struct {
 	// JSONProducer registers a producer for a "application/io.goswagger.examples.todo-list.v1+json" mime type
 	JSONProducer runtime.Producer
 
-	// TodosGetHandler sets the operation handler for the get operation
-	TodosGetHandler todos.GetHandler
 	// TodosAddOneHandler sets the operation handler for the add one operation
 	TodosAddOneHandler todos.AddOneHandler
 	// TodosDestroyOneHandler sets the operation handler for the destroy one operation
 	TodosDestroyOneHandler todos.DestroyOneHandler
+	// TodosFindTodosHandler sets the operation handler for the find todos operation
+	TodosFindTodosHandler todos.FindTodosHandler
 	// TodosUpdateOneHandler sets the operation handler for the update one operation
 	TodosUpdateOneHandler todos.UpdateOneHandler
 
@@ -115,16 +115,16 @@ func (o *TodoListAPI) Validate() error {
 		unregistered = append(unregistered, "JSONProducer")
 	}
 
-	if o.TodosGetHandler == nil {
-		unregistered = append(unregistered, "todos.GetHandler")
-	}
-
 	if o.TodosAddOneHandler == nil {
 		unregistered = append(unregistered, "todos.AddOneHandler")
 	}
 
 	if o.TodosDestroyOneHandler == nil {
 		unregistered = append(unregistered, "todos.DestroyOneHandler")
+	}
+
+	if o.TodosFindTodosHandler == nil {
+		unregistered = append(unregistered, "todos.FindTodosHandler")
 	}
 
 	if o.TodosUpdateOneHandler == nil {
@@ -204,11 +204,6 @@ func (o *TodoListAPI) initHandlerCache() {
 		o.handlers = make(map[string]map[string]http.Handler)
 	}
 
-	if o.handlers["GET"] == nil {
-		o.handlers[strings.ToUpper("GET")] = make(map[string]http.Handler)
-	}
-	o.handlers["GET"]["/"] = todos.NewGet(o.context, o.TodosGetHandler)
-
 	if o.handlers["POST"] == nil {
 		o.handlers[strings.ToUpper("POST")] = make(map[string]http.Handler)
 	}
@@ -218,6 +213,11 @@ func (o *TodoListAPI) initHandlerCache() {
 		o.handlers[strings.ToUpper("DELETE")] = make(map[string]http.Handler)
 	}
 	o.handlers["DELETE"]["/{id}"] = todos.NewDestroyOne(o.context, o.TodosDestroyOneHandler)
+
+	if o.handlers["GET"] == nil {
+		o.handlers[strings.ToUpper("GET")] = make(map[string]http.Handler)
+	}
+	o.handlers["GET"]["/"] = todos.NewFindTodos(o.context, o.TodosFindTodosHandler)
 
 	if o.handlers["PUT"] == nil {
 		o.handlers[strings.ToUpper("PUT")] = make(map[string]http.Handler)

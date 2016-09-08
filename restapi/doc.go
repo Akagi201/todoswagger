@@ -4,8 +4,8 @@ The product of a tutorial on goswagger.io
 
 
     Schemes:
-      https
       http
+      https
     Host: localhost
     BasePath: /
     Version: 0.1.0
