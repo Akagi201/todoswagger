@@ -2,19 +2,21 @@ package restapi
 
 import (
 	"crypto/tls"
+	"log"
 	"net/http"
+	"sync"
+	"sync/atomic"
 
 	errors "github.com/go-openapi/errors"
 	runtime "github.com/go-openapi/runtime"
 	middleware "github.com/go-openapi/runtime/middleware"
 	"github.com/go-openapi/swag"
 
-	"sync"
-	"sync/atomic"
-
 	"github.com/Akagi201/todoswagger/models"
 	"github.com/Akagi201/todoswagger/restapi/operations"
 	"github.com/Akagi201/todoswagger/restapi/operations/todos"
+	"github.com/dre1080/recover"
+	"github.com/justinas/alice"
 	"github.com/rs/cors"
 )
 
@@ -183,7 +185,12 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
+	recovery := recover.New(&recover.Options{
+		Log: log.Print,
+	})
 	handleCORS := cors.Default().Handler
 
-	return handleCORS(handler)
+	chain := alice.New(recovery, handleCORS).Then(handler)
+
+	return chain
 }
