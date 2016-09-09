@@ -15,6 +15,7 @@ import (
 	"github.com/Akagi201/todoswagger/models"
 	"github.com/Akagi201/todoswagger/restapi/operations"
 	"github.com/Akagi201/todoswagger/restapi/operations/todos"
+	"github.com/rs/cors"
 )
 
 // This file is safe to edit. Once it exists it will not be overwritten
@@ -182,5 +183,7 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
-	return handler
+	handleCORS := cors.Default().Handler
+
+	return handleCORS(handler)
 }
