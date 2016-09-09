@@ -20,6 +20,10 @@ swagger generate server -A TodoList -f ./swagger.yml
 ```
 
 ```
+swagger generate client -A TodoList -f ./swagger.yml
+```
+
+```
 cd cmd/todo-list-server
 go build
 ```
